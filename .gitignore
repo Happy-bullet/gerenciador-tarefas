@@ -1,0 +1,19 @@
+# Maven
+target/
+
+# Dados do banco criados pelo docker-compose
+docker/
+
+# Eclipse
+.settings/
+.classpath
+.project
+bin/
+
+# IntelliJ
+.idea/
+*.iml
+
+# Sistema
+.DS_Store
+Thumbs.db

@@ -1,0 +1,18 @@
+version: '3.8'
+
+# Alternativa ao XAMPP: sobe um MariaDB já com o banco TarefasDB criado.
+# Usuário root sem senha, igual ao padrão do XAMPP, para o hibernate.cfg.xml servir aos dois.
+services:
+  mariadb:
+    image: mariadb:10.6
+    container_name: mariadb-tarefas
+    environment:
+      MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: "yes"
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./docker/mysql-data:/var/lib/mysql
+      - ./src/main/resources/create_table.sql:/docker-entrypoint-initdb.d/create_table.sql
+
+volumes:
+  mysql-data:
