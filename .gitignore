@@ -17,3 +17,6 @@ bin/
 # Sistema
 .DS_Store
 Thumbs.db
+
+# Tomcat
+apache-tomcat-*/

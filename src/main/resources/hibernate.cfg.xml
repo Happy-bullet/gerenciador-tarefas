@@ -3,21 +3,22 @@
         "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
         "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
-    <session-factory>
-        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
-        <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
-        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/TarefasDB?useSSL=false&amp;allowPublicKeyRetrieval=true&amp;characterEncoding=UTF-8</property>
+	<session-factory>
+		<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+		<property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+		<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/TarefasDB?useSSL=false&amp;allowPublicKeyRetrieval=true&amp;serverTimezone=UTC</property>
 
-        <!-- Padrão do XAMPP: usuário root sem senha. Ajuste se o seu MySQL for diferente -->
-        <property name="hibernate.connection.username">root</property>
-        <property name="hibernate.connection.password"></property>
-        <property name="hibernate.connection.pool_size">5</property>
 
-        <!-- Mostra no console do Tomcat o SQL que o Hibernate gera -->
-        <property name="hibernate.show_sql">true</property>
-        <property name="hibernate.format_sql">true</property>
+		<!-- Padrão do XAMPP: usuário root sem senha. Ajuste se o seu MySQL for 
+			diferente -->
+		<property name="hibernate.connection.username">root</property>
+		<property name="hibernate.connection.password">root</property>
 
-        <!-- mapping -->
-        <mapping class="com.gerenciador.modelo.Tarefa"/>
-    </session-factory>
+		<!-- Mostra no console do Tomcat o SQL que o Hibernate gera -->
+		<property name="hibernate.show_sql">true</property>
+		<property name="hibernate.format_sql">true</property>
+
+		<!-- mapping -->
+		<mapping class="com.gerenciador.modelo.Tarefa" />
+	</session-factory>
 </hibernate-configuration>

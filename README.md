@@ -1,6 +1,6 @@
 # 📝 Gerenciador de Tarefas
 
-> Aplicação Web Java (JSP + Servlet + Hibernate) para cadastro e listagem de tarefas, com MySQL/MariaDB.
+> Aplicação Web Java (JSP + Servlet + Hibernate) para cadastro, listagem, edição e exclusão de tarefas, com MySQL/MariaDB.
 
 Trabalho AT da disciplina Linguagem de Programação Orientada a Objetos (2026-II).
 
@@ -29,7 +29,7 @@ Trabalho AT da disciplina Linguagem de Programação Orientada a Objetos (2026-I
 docker compose up -d
 ```
 
-O `hibernate.cfg.xml` usa usuário `root` sem senha (padrão do XAMPP). Se o seu MySQL tiver senha, altere `hibernate.connection.password`.
+O `hibernate.cfg.xml` usa usuário `root` com senha `root` (a mesma do `docker-compose.yml`). No XAMPP, onde o root vem sem senha, deixe `hibernate.connection.password` vazio.
 
 ### 2. Executar no Eclipse
 1. `File > Import > Maven > Existing Maven Projects` e selecione a pasta do projeto.
@@ -50,9 +50,11 @@ O arquivo `target/gerenciador-tarefas.war` pode ser copiado para a pasta `webapp
 | Página | Funcionalidade |
 |---|---|
 | `cadastroTarefas.jsp` | Formulário com nome, data de vencimento, prioridade e andamento |
-| `listarTarefas.jsp` | Tabela com todas as tarefas do banco |
+| `listarTarefas.jsp` | Tabela com todas as tarefas do banco, com botões **Editar** e **Excluir** em cada linha |
 | `/tarefas` (GET) | Consulta as tarefas e exibe a listagem |
-| `/tarefas` (POST) | Valida e grava uma nova tarefa |
+| `/tarefas?acao=editar&id=N` (GET) | Abre o formulário de cadastro já preenchido com a tarefa N |
+| `/tarefas` (POST) | Valida e grava uma nova tarefa; com o campo `id` preenchido, atualiza a tarefa existente |
+| `/tarefas` (POST, `acao=excluir`) | Exclui a tarefa, após confirmação no navegador |
 
 ---
 
@@ -107,7 +109,7 @@ gerenciador-tarefas/
 │   └── create_table.sql               [Script do banco]
 ├── src/main/webapp/
 │   ├── index.jsp                      [Redireciona para a lista]
-│   ├── cadastroTarefas.jsp            [View de cadastro]
+│   ├── cadastroTarefas.jsp            [View de cadastro e edição]
 │   ├── listarTarefas.jsp              [View de listagem]
 │   └── WEB-INF/web.xml
 ├── pom.xml                            [Dependências Maven]
@@ -124,7 +126,9 @@ gerenciador-tarefas/
 | Padrão **DAO** | Só o `TarefaDAO` abre `Session` do Hibernate; trocar a forma de persistir não afeta servlet nem JSP |
 | **Hibernate** em vez de JDBC puro | O SQL de INSERT e SELECT é gerado a partir das anotações da entidade `Tarefa` |
 | **Enums + `AttributeConverter`** | O banco guarda `'em progresso'` (com espaço), que não pode ser nome de constante Java. O conversor traduz `EM_PROGRESSO` ↔ `'em progresso'` e cada enum tem o rótulo exibido na tela |
-| **Post/Redirect/Get** | Depois de cadastrar, o navegador é redirecionado para a lista; apertar F5 não grava a tarefa de novo |
+| **Post/Redirect/Get** | Depois de cadastrar, editar ou excluir, o navegador é redirecionado para a lista; apertar F5 não repete a operação |
+| **Mesmo formulário para cadastro e edição** | `cadastroTarefas.jsp` recebe a tarefa em `${tarefa}` e um campo oculto `id`; vazio = cadastro, preenchido = edição. Evita duas telas iguais |
+| **Excluir por POST** | Um link GET pode ser disparado só por abrir uma URL; a exclusão usa um formulário POST com `confirm()` antes de enviar |
 | **Validação no servidor** | O `required` do HTML pode ser burlado; o servlet confere tudo antes de chamar o DAO |
 | **`fn:escapeXml`** nas JSPs | Evita que um texto digitado com HTML seja interpretado pela página |
 | **UTF-8** em todo o caminho | `pageEncoding` nas JSPs, `setCharacterEncoding` no servlet e `characterEncoding` na URL do banco, para os acentos não quebrarem |
